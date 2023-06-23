@@ -1,0 +1,140 @@
+Dataset provided:
+
+/home/PH2780L/public/FinalProject/geno_final.ped – PLINK format
+/home/PH2780L/public/FinalProject/geno_final.map – PLINK format
+/home/PH2780L/public/FinalProject/pheno_final.csv – see the table below
+
+#	Variable	Label	Notes
+1	ID	Subject ID	
+2	TG	Triglycerides (mg/dL)	
+3	V1AGE01	Age (years)	
+4	SEX	Subject sex	1=Male, 2=Female
+5	BMI01	Body mass index (kg/m2)	
+6	ANTA04	Subject weight (lbs)	
+7	CURSMK	Is subject a current smoker?	0=No, 1=Yes
+
+Instruction: Please use PLINK, R, Unix commands or any other tools to analyze the provided dataset for the genetic association study with triglycerides, and answer the following questions. Please provide the commands/code you use and brief output that is related to the questions. You must complete the work independently, outside help is NOT permitted. Please only discuss with the instructor team for clarification of questions.
+
+This final project will be graded based on both completeness and correctness of your answers. Points will be deducted for questions that are not answered, or answered incorrectly, or missing commands/code, or missing output. Please upload your answers to Canvas by 11:59pm CDT on June 23, 2023. Late submission will not be accepted.
+
+########################################################################
+
+1.	Describe the format of genotype (ped), map, phenotype and covariate files for PLINK. What do each column and each row represent? You don’t need to show the commands/code or output for this question. (4 pts)
+
+
+
+
+
+
+
+
+
+2.	How many SNPs are there in the map file? Which chromosome are they on? How many individuals are there in the ped file?  Which individual have the highest (individual-level) missing genotype rate? (4 pts) 
+
+
+
+
+
+
+
+
+3.	Which SNP(s) have the highest (variant-level) missing genotype rate?  How many SNPs have missing data > 10%? How many SNPs have minor allele frequency (MAF) > 45%?  How many SNPs fail HWE (defined as p <= 0.001 in the Hardy-Weinberg Equilibrium test using all samples)? (4 pts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4.	Provide a summary statistics table for all variables in the phenotype file. For binary variables, include the sample size and proportion in each category; for continuous variables, include the mean and standard deviation. (4 pts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5.	Evaluate the distribution of triglycerides and BMI, report if any transformation prior to the analysis is needed. (3 pts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6.	Apply the log transformation on triglycerides and BMI, prepare phenotype and covariate files accordingly. Phenotype is log-transformed triglycerides, and covariates are age, sex and log-transformed BMI. Conduct linear regressions using the phenotype and covariate files that you create. In your results, which SNP has the smallest p-value? What is the base position of the top SNP and what is the MAF for this SNP? (3 pts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7.	Provide a regional association plot (± 100 kb) of the top SNP. What genes are in this association region? How many SNPs are located in this association region?  (3 pts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8.	Provide a QQ-plot and Manhattan plot, describe the results.  Calculate the genomic control inflation factor lambda, and interpret possible underlying issue if any. (5 pts)
