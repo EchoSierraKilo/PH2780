@@ -1,0 +1,48 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ hdl.log ]
+Analysis started: Wed Jun 14 18:07:07 2023
+
+Options in effect:
+	--noweb
+	--file lab4clean
+	--pheno hdl.pheno
+	--covar hdl.covar
+	--linear
+	--ci 0.95
+	--out hdl
+
+1704 (of 1704) markers to be included from [ lab4clean.map ]
+1000 individuals read from [ lab4clean.ped ] 
+1000 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 1000 controls and 0 missing
+623 males, 377 females, and 0 of unspecified sex
+Reading alternate phenotype from [ hdl.pheno ] 
+1000 individuals with non-missing alternate phenotype
+Assuming a quantitative trait
+Missing phenotype value is -9
+Reading 2 covariates from [ hdl.covar ] with nonmissing values for 1000 individuals
+Before frequency and genotyping pruning, there are 1704 SNPs
+1000 founders and 0 non-founders found
+Total genotyping rate in remaining individuals is 0.994193
+0 SNPs failed missingness test ( GENO > 1 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 1704 SNPs
+After filtering, 1000 individuals with non-missing status
+After filtering, 623 males, 377 females, and 0 of unspecified sex
+Converting data to Individual-major format
+Writing linear model association results to [ hdl.assoc.linear ] 
+
+Analysis finished: Wed Jun 14 18:07:08 2023
+

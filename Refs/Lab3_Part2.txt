@@ -1,0 +1,80 @@
+
+
+Analysis strategy for evaluating linkage of qualitative traits
+
+Getting your data ready to analyze (Computer lab server: 129.106.2.94)
+1)  Review components of Merlin from the website: http://www.sph.umich.edu/csg/abecasis/Merlin/
+
+2)  In this lab session, you will create 3 files (1 ped, 1 dat and 1 map file) for Merlin. Start from the merged phenogeno_lab3.txt file (/home/PH2780L/public/Lab3/, copy to your personal folder) to create the ped file.
+
+Ped File
+a)	Recode traits 5 missing values to “X”.
+b)	Be sure the ped file is sorted on famid.
+c)	Save your lab3 dataset.
+d)	Contains: famid, id, fathid, mothid, sex, recoded trait 5 [trait5_new], covar1, age and ms1-ms6.
+e)	Genetic data should be coded as “# #” instead of “#_#”.
+f)	Be sure to remove the header [e.g. sed -e ‘1d’]
+## Hint: try to do step a-c in R, and step d-f using UNIX commands.
+
+3)	Create the companion data file and the genetic map file.  
+
+Map File
+For the genetic map file, the cM positions for each marker are as follows
+ms1	46.0
+ms2	63.0
+ms3	76.0
+ms4	81.0
+ms5	88.0
+ms6	94.0
+
+cat > lab3.map
+CHROMOSOME	MARKER	POSITION
+10	ms1	46.0
+10	ms2	63.0
+10	ms3	76.0
+10	ms4	81.0
+10	ms5	88.0
+10	ms6	94.0
+
+Dat File
+Be sure to include recoded trait 5 and all six microsatellite markers. Treat covar1 and age as covariates.
+
+cat > lab3.dat
+T trait5
+C covar1
+C age
+M ms1
+M ms2
+M ms3
+M ms4
+M ms5
+M ms6
+
+4)	Make sure the extensions on the files are *.ped, *.dat and *.map
+
+Running MERLIN (pedstats)
+1) Get a summary description using pedstats (ANSWER Q1)
+
+pedstats -d lab3.dat -p lab3.ped > lab3.pedstat
+
+Running Merlin (Variance components linkage analysis)
+1) Request a variance components linkage analysis for trait5.  First do a single point analysis, then request a multipoint analysis for a grid of every cM (--grid 1).  Be sure to include the pdf option. (ANSWER Q1).
+
+merlin -d lab3.dat -p lab3.ped -m lab3.map --vc --pdf --prefix merlin_sglpt > lab3.sglpt
+
+2) View the multipoint results plotted in a pdf file. (ANSWER Q2)
+
+merlin -d lab3.dat -p lab3.ped -m lab3.map --vc --grid 1 --pdf --prefix merlin_mltpt > lab3.mltpt
+
+3) Run a multipoint variance components linkage analysis of trait5 adjusted for covar1 and age.
+
+merlin -d lab3.dat -p lab3.ped -m lab3.map --vc --grid 1 --useCovariates --pdf --prefix merlin_mltadj > lab3.mltadj
+
+4) Compare the adjusted and unadjusted multipoint results. (ANSWER Q3)
+
+
+
+
+
+
+

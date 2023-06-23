@@ -1,0 +1,216 @@
+%PDF-1.4
+%гра
+
+1 0 obj
+ << /Length 2 0 R >>
+stream
+q
+0.0 0.0 792.0 612.0 re
+W n
+
+BT
+/F05 29.3 Tf
+368.09 531.93 Td
+(trait5 [VC])  Tj
+0.000 0.000 0.000 RG
+1.14 w
+ET
+163.2 115.3 549.6 365.8 re
+S
+
+Q
+
+q
+0.0 0.0 752.4 612.0 re
+W n
+
+209.0 115.3 m
+209.0 108.0 l
+S
+
+323.5 115.3 m
+323.5 108.0 l
+S
+
+438.0 115.3 m
+438.0 108.0 l
+S
+
+552.5 115.3 m
+552.5 108.0 l
+S
+
+667.0 115.3 m
+667.0 108.0 l
+S
+
+0.000 0.000 0.000 rg
+BT
+/F04 18.3 Tf
+191.21 85.15 Td
+(50.0)  Tj
+114.50 0.00 Td
+(60.0)  Tj
+114.50 0.00 Td
+(70.0)  Tj
+114.50 0.00 Td
+(80.0)  Tj
+114.50 0.00 Td
+(90.0)  Tj
+/F05 18.3 Tf
+-342.81 -32.02 Td
+(Chromosome 10 Position (cM))  Tj
+ET
+Q
+
+q
+0.0 0.0 792.0 546.6 re
+W n
+
+163.2 115.3 m
+155.9 115.3 l
+S
+
+163.2 206.8 m
+155.9 206.8 l
+S
+
+163.2 298.2 m
+155.9 298.2 l
+S
+
+163.2 389.7 m
+155.9 389.7 l
+S
+
+163.2 481.1 m
+155.9 481.1 l
+S
+
+BT
+/F04 18.3 Tf
+125.89 106.19 Td
+(0.0)  Tj
+0.00 91.45 Td
+(0.4)  Tj
+0.00 91.45 Td
+(0.8)  Tj
+0.00 91.45 Td
+(1.2)  Tj
+0.00 91.45 Td
+(1.6)  Tj
+/F05 18.3 Tf
+0.000 1.000 -1.000 0.000 0 0 Tm
+251.98 -91.82 Td
+(LOD score)  Tj
+ET
+Q
+
+q
+163.2 115.3 549.6 365.8 re
+W n
+
+1.14 w
+2.29 w
+[] 0 d
+2.29 w
+163.2 183.1 m
+357.9 423.8 l
+506.7 302.8 l
+564.0 389.2 l
+644.1 322.8 l
+712.8 223.0 l
+S
+
+Q
+
+
+endstream
+endobj
+
+2 0 obj
+ 1129 
+endobj
+
+5 0 obj
+<<
+/Type /Page 
+/Parent  4 0 R 
+/Contents  [  1 0 R  ] 
+/Resources <<
+/ProcSet  [ /PDF /Text  ]
+/Font  3 0 R 
+>>
+>>
+endobj
+
+6 0 obj
+<<
+/Author (Merlin (c) 2000-2003 Goncalo Abecasis) 
+/Subject (Automatically generated summaries) 
+/Creator (A C++ PDF Library (c) 2001 Goncalo Abecasis) 
+/CreationDate  (D:20230607) 
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Pages 
+/Kids  [  5 0 R  ] 
+/Count  1 
+/MediaBox  [  0  0  792  612  ] 
+/Rotate  0 
+>>
+endobj
+
+7 0 obj
+<<
+/Type /Font 
+/Subtype /Type1 
+/BaseFont /Helvetica 
+>>
+endobj
+
+8 0 obj
+<<
+/Type /Font 
+/Subtype /Type1 
+/BaseFont /Helvetica-Bold 
+>>
+endobj
+
+3 0 obj
+<<
+/F04  7 0 R 
+/F05  8 0 R 
+>>
+endobj
+
+9 0 obj
+<<
+/Type /Catalog 
+/Pages  4 0 R 
+>>
+endobj
+
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000001199 00000 n 
+0000001821 00000 n 
+0000001556 00000 n 
+0000001222 00000 n 
+0000001354 00000 n 
+0000001668 00000 n 
+0000001742 00000 n 
+0000001869 00000 n 
+trailer
+<<
+/Size 10
+/Root 9 0 R
+/Info 6 0 R
+>>
+startxref
+1922
+%%EOF

@@ -1,0 +1,73 @@
+
+
+Getting ready to analyze your data
+
+1) Merge the genotype (geno.txt) and phenotype (pheno.txt) datasets
+
+pheno <- read.table("pheno.txt", header=T, sep="\t")
+geno <- read.table("geno.txt", header=T, sep="\t")
+
+
+2) Create a new dataset called pheno.geno
+
+pheno.geno <- merge(pheno, geno, by="id")
+
+3) Recode any qualitative trait variables as necessary.  For example:
+Affection status:
+2=affected
+1=unaffected
+0=unknown
+
+pheno.geno$trait6_new <- pheno.geno$trait6 + 1
+pheno.geno$trait6_new <- ifelse(is.na(pheno.geno$trait6), 0, pheno.geno$trait6_new)
+table(pheno.geno$trait6_new)
+table(addNA(pheno.geno$trait6))
+table(addNA(pheno.geno$trait6), pheno.geno$trait6_new)
+
+(note that trait6 and trait7 are coded as 1=affected, 0=unaffected, blank=missing in the original dataset)
+
+Steps for evaluating Hardy-Weinberg equilibrium in R
+
+1) Use your dataset (pheno.geno) to review the genotype frequencies for SNP4 using the “table” function.  Use the observed genotype frequencies to evaluate whether SNP4 is in Hardy-Weinberg equilibrium.
+
+table(pheno.geno$SNP4)
+obs.aa <- 4
+obs.ag <- 275
+obs.gg <- 860
+N <- obs.aa+obs.ag+obs.gg
+frq.a <- (obs.aa*2+obs.ag)/(N*2)
+frq.g <- (obs.gg*2+obs.ag)/(N*2)
+exp.aa <- frq.a^2*N
+exp.gg <- frq.g^2*N
+exp.ag <- 2*frq.a*frq.g*N
+snp.chisq <- (obs.aa-exp.aa)^2/exp.aa +(obs.ag-exp.ag)^2/exp.ag +(obs.gg-exp.gg)^2/exp.gg
+snp.chisq
+pchisq(snp.chisq, df = 1, lower.tail=FALSE)
+
+2) Use the “HardyWeinberg” R package to test whether SNP4 is in Hardy-Weinberg equilibrium.
+
+library(HardyWeinberg)
+SNP4 <- c(AA = 4, AG = 275, GG = 860)
+HW.test <- HWChisq(SNP4, cc=0.5, verbose=TRUE)
+
+3) Select a subset of unrelated individuals and rerun the R code to test whether SNP4 is in Hardy-Weinberg equilibrium.
+
+table(pheno.geno$SNP4, pheno.geno$generate)
+SNP4.unrelated <- c(AA = 2, AG = 108, GG = 233)
+HW.test <- HWChisq(SNP4.unrelated, cc=0.5, verbose=TRUE)
+
+Steps for evaluating Hardy-Weinberg equilibrium in PEDSTAT
+
+1) Review the PEDSTATS tutorial “PEDSTATS Input Files” http://csg.sph.umich.edu/abecasis/Pedstats/tour/input.html
+Use R to prepare the input data files. Note: use only trait6 and SNP4 in the pedigree file.
+
+2) Get a summary description using pedstats
+
+pedstats -d lab1_merlin.dat -p lab1_merlin.ped 
+# pedstats -d lab1_merlin.dat -p lab1_merlin.ped > lab1.pedstats
+
+3) Ignore Mendelian errors and test HWE using pedstats
+
+pedstats -d lab1_merlin.dat -p lab1_merlin.ped --ignoreMendelianErrors --hardyWeinberg --checkFounders
+
+#pedstats -d lab1_merlin.dat -p lab1_merlin.ped --ignoreMendelianErrors --hardyWeinberg --checkFounders --pdf

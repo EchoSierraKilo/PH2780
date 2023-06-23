@@ -1,0 +1,48 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ lab4clean.log ]
+Analysis started: Wed Jun 14 17:40:49 2023
+
+Options in effect:
+	--noweb
+	--file lab4
+	--mind 0.1
+	--geno 0.1
+	--maf 0.01
+	--hwe 0.0001
+	--recode
+	--out lab4clean
+
+1940 (of 1940) markers to be included from [ lab4.map ]
+1000 individuals read from [ lab4.ped ] 
+1000 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 1000 controls and 0 missing
+623 males, 377 females, and 0 of unspecified sex
+Before frequency and genotyping pruning, there are 1940 SNPs
+1000 founders and 0 non-founders found
+0 of 1000 individuals removed for low genotyping ( MIND > 0.1 )
+7 markers to be excluded based on HWE test ( p <= 0.0001 )
+	0 markers failed HWE test in cases
+	7 markers failed HWE test in controls
+Total genotyping rate in remaining individuals is 0.993726
+5 SNPs failed missingness test ( GENO > 0.1 )
+225 SNPs failed frequency test ( MAF < 0.01 )
+After frequency and genotyping pruning, there are 1704 SNPs
+After filtering, 0 cases, 1000 controls and 0 missing
+After filtering, 623 males, 377 females, and 0 of unspecified sex
+Writing recoded ped file to [ lab4clean.ped ] 
+Writing new map file to [ lab4clean.map ] 
+
+Analysis finished: Wed Jun 14 17:40:50 2023
+

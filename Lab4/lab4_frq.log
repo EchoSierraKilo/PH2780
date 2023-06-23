@@ -1,0 +1,33 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ lab4_frq.log ]
+Analysis started: Wed Jun 14 16:59:23 2023
+
+Options in effect:
+	--noweb
+	--file lab4
+	--freq
+	--out lab4_frq
+
+1940 (of 1940) markers to be included from [ lab4.map ]
+1000 individuals read from [ lab4.ped ] 
+1000 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 1000 controls and 0 missing
+623 males, 377 females, and 0 of unspecified sex
+Before frequency and genotyping pruning, there are 1940 SNPs
+1000 founders and 0 non-founders found
+Writing allele frequencies (founders-only) to [ lab4_frq.frq ] 
+
+Analysis finished: Wed Jun 14 16:59:23 2023
+

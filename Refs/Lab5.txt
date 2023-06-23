@@ -1,0 +1,100 @@
+Evaluating sequence data
+Server address: 129.106.2.142
+
+PSEQ: http://atgu.mgh.harvard.edu/plinkseq/index.shtml
+
+Datasets needed for this lab: 
+lab5.vcf.gz 
+lab5.phe
+
+Getting Started
+1. Copy the files /home/PH2780L/public/Lab5/ to your own folder (/home/PH2780L/username) and examine the files. (ANSWER Q1)
+
+cat lab5.phe
+zcat lab5.vcf.gz | head -n 35
+
+2. Review the PSEQ web page to see how to create a project and load the VCF and phenotype files. (ANSWER Q2)
+Hint: look under the link for project management on the PSEQ website
+
+pseq Lab5 new-project --vcf lab5.vcf.gz
+pseq Lab5 load-vcf
+pseq Lab5 var-summary
+pseq Lab5 load-pheno --file lab5.phe
+
+3. Review the link “Viewing data” and try v-view and counts. (ANSWER Q3)
+
+pseq Lab5 v-view
+pseq Lab5 v-view --simple
+pseq Lab5 v-view --vmeta --show ANNO
+
+List variants where there are individuals who carry at least one genotype containing a variant allele.(ANSWER Q4)
+
+pseq Lab5 v-view --geno
+pseq Lab5 v-view --geno --verbose
+pseq Lab5 v-view --geno --only-minor
+pseq Lab5 counts
+pseq Lab5 g-counts
+
+List individuals that carry the alternate allele for each singleton variant
+pseq Lab5 v-view --geno --only-minor --mask mac=1-1
+
+For specific variants, see if there are individuals that carry alternate alleles at both variants. (ANSWER Q5)
+
+pseq Lab5 mrv-view --mask reg=chr13:113801843,chr13:113801682
+pseq Lab5 g-counts | grep chr13:113801843
+pseq Lab5 g-counts | grep chr13:113801682
+
+4. Obtain summary statistics on the VCFs (v-stats and i-stats). (ANSWER Q6 & Q7)
+Hint: look under the link for summary statistics
+
+pseq Lab5 v-stats --mask filter=PASS > Lab5.vstats.txt
+pseq Lab5 i-stats --mask filter=PASS > Lab5.istats.txt
+
+Analysis
+5. Evaluate the association with disease status by Fisher’s exact test as well as a logistic regression model containing age and sex as covariates. (ANSWER Q8)
+Hint: look under the link for association tests
+
+pseq Lab5 v-assoc --phenotype status > status.assoc.txt
+awk '{if($8>0) print $8}' status.assoc.txt | sort -n
+cut -f20 status.assoc.txt | sort -g | head
+cut -f22 status.assoc.txt | sort -g | head
+cut -f24 status.assoc.txt | sort -g | head
+pseq Lab5 glm --phenotype status --covar age sex > status.logreg.txt
+awk '{if ($9 != "NA") print}' status.logreg.txt | sort -g -k9 | head
+
+6. Run a linear regression for the quantitative traits: fib, f7, f8, vwf, adjusting for age and sex. (ANSWER Q9)
+
+pseq Lab5 glm --phenotype fib --covar age sex > fib.linreg.txt
+pseq Lab5 glm --phenotype f7 --covar age sex >  f7.linreg.txt
+pseq Lab5 glm --phenotype f8 --covar age sex >  f8.linreg.txt
+pseq Lab5 glm --phenotype vwf --covar age sex > vwf.linreg.txt
+
+awk '{if ($9 != "NA") print}' fib.linreg.txt | sort -g -k9 | head
+awk '{if ($9 != "NA") print}' f7.linreg.txt | sort -g -k9 | head
+awk '{if ($9 != "NA") print}' f8.linreg.txt | sort -g -k9 | head
+awk '{if ($9 != "NA") print}' vwf.linreg.txt | sort -g -k9 | head
+
+
+7. Visit the exome variant server for the NHLBI Exome Sequencing Project and evaluate the top SNVs from the linear regression models: http://evs.gs.washington.edu/EVS/. (ANSWER Q10)
+
+
+8. Run burden testing for the dichotomous trait. (ANSWER Q11)
+
+pseq Lab5 assoc --phenotype status --mask all.group monomorphic.ex
+pseq Lab5 assoc --phenotype status --mask all.group monomorphic.ex --tests uniq vt fw calpha sumstat
+EPACTS  http://genome.sph.umich.edu/wiki/EPACTS
+
+1.	Prepare for ped and tbi files
+
+tail -n +10 lab5.phe | awk '{print $1, $1, 0, 0, $2, $8, $3}' | sed '1i #FID IID FaID MoID sex status age' > lab5.ped
+
+tabix -pvcf -f lab5.vcf.gz
+
+2.	Evaluate the single variant association with disease status using a logistic regression model containing age and sex as covariates. Compare your results with PSEQ step 5. Are they consistent?
+
+epacts single --vcf lab5.vcf.gz --pheno status --ped lab5.ped --test b.wald --cov sex --cov age --chr 13 --out Lab5
+
+make -f /home/zcoban/Lab5/Lab5.Makefile
+
+cat Lab5.epacts.top5000
+

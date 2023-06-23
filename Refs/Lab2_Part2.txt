@@ -1,0 +1,97 @@
+
+Quantitative traits
+
+Dataset needed for this lab: 
+genopheno_lab2.txt
+
+Summary statistics and summary tables:
+You will need to calculate summary statistics for phenotypes in almost any paper you write. Also check that your data meets the assumptions of the analyses you plan to use.
+
+1. Calculate the mean and standard deviation of quantitative variables. Fill in the tables.
+
+lab2 <- read.table ("/home/PH2780L/public/Lab2/genopheno_lab2.txt", sep="\t", header=T, na.strings="X")
+tapply(lab2$age, lab2$sex, mean, na.rm = T)
+tapply(lab2$age, lab2$sex, sd, na.rm = T)
+tapply(lab2$trait2, lab2$sex, mean, na.rm = T)
+tapply(lab2$trait2, lab2$sex, sd, na.rm = T)
+tapply(lab2$covar1, lab2$sex, mean, na.rm = T)
+tapply(lab2$covar1, lab2$sex, sd, na.rm = T)
+table(lab2$smoking, lab2$sex)
+table(lab2$trait1, lab2$sex)
+
+2. Characterize the categorical variables (%). Fill in the table for the distributions stratified by sex. (ANSWER Q1 AND Q2)
+
+	Females	Males
+N		
+Age		
+Trait2		
+Covar1		
+Smokers		
+Trait1 (affected)		
+
+3. Check the quantitative traits for normality. (ANSWER Q3)
+
+pdf("trait2.pdf")
+hist(lab2$trait2, xlab="trait 2", main="Histogram of Trait 2", col="light blue")
+dev.off()
+# repeat for trait3, trait4, trait5, covar1
+
+4. Normalize trait4, trait5 and covar1 by log transformation.  (ANSWER Q3)
+
+lab2$log_trait4 <- log(lab2$trait4)
+lab2$log_trait5 <- log(lab2$trait5)
+lab2$log_covar1 <- log(lab2$covar1)
+
+5. Export the dataset with the transformed variables as merlin_lab2.csv (comma delimited file). Replace missing values with “X”.
+
+write.table(lab2, file="/home/PH2780L/zcoban/Lab2/merlin_lab2.csv", row.names=F, col.names=T, sep=",", quote=F, na="X")
+
+Heritability
+1. Prepare files to estimate heritability of quantitative traits in Merlin
+
+Unix commands:
+awk ‘{print $X}’	print the Xth column
+sed ‘s/xxx/yyy/g’	change all occurrences of xxx into yyy
+sed -e ‘1d’		delete 1st line (note this is the number 1, not the letter l)
+
+Website reference:
+http://www.sph.umich.edu/csg/abecasis/Merlin/tour/input_files.html
+
+Create merlin_lab2.ped:
+Start with merlin_lab2.csv
+Columns should include: famid, id, fathid, mothid, sex, trait4, covar1, ms1
+Delete all other variables
+Delete the header
+
+awk -F, '{print $1,$2,$3,$4,$5,$9,$13,$17}' merlin_lab2.csv | sed 's/_/ /g' | sed -e '1d' > merlin_lab2.ped
+
+Create lab2.dat:
+cat > merlin_lab2.dat
+T trait4
+T covar1
+M MS1
+
+Create lab2.map:
+cat > merlin_lab2.map
+CHROMOSOME	MARKER	POSITION
+10	MS1	1
+
+2. Run pedstats to check the files
+pedstats -d merlin_lab2.dat -p merlin_lab2.ped > lab2.pedstat
+
+3. Run Merlin to obtain an estimate of heritability for these three traits (ANSWER Q4)
+merlin -d merlin_lab2.dat -p merlin_lab2.ped -m merlin_lab2.map --vc > merlin_lab2.out
+
+Repeat for log transformed trait4 and covar1 (ANSWER Q5)
+awk -F, '{print $1,$2,$3,$4,$5,$23,$25,$17}' merlin_lab2.csv | sed 's/_/ /g' | sed -e '1d' > merlin_lab2_log.ped
+
+cat > merlin_lab2_log.dat
+T log_trait4
+T log_covar1
+M MS1
+
+cp merlin_lab2.map merlin_lab2_log.map
+
+merlin -d merlin_lab2_log.dat -p merlin_lab2_log.ped -m merlin_lab2_log.map --vc > merlin_lab2_log.out
+
+

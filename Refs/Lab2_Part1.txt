@@ -1,0 +1,76 @@
+
+LD & Haplotypes
+
+Getting ready to analyze your data
+
+Datasets needed for this lab are located in /home/PH2780L/public/Lab2
+lab2.ped
+lab2.map
+ 
+Web pages:
+	Genome Browser (https://genome.ucsc.edu/)	
+PLINK (http://zzz.bwh.harvard.edu/plink/)
+
+
+1.	Connect to the server (129.106.2.94)
+2.	Create a new subdirectory (named for example Lab2) in your home directory
+3.	Copy files (lab2.ped and lab2.map) from the public folder to your newly created subdirectory
+4.	Review the files
+
+less -S 	View a file, with one row for each line (useful when there are many columns in the file)
+
+(ANSWER Q1)
+
+Steps for evaluating LD
+Suppose that you would like to analyze the CETP gene located on chromosome 16. First, you need to find the exact location of this gene.
+
+1.	Go to the UCSC Genome Browser website (choose “Genomes” tab)
+2.	Choose “Dec.2013 (GRCh38/hg38)” under Human Assembly, and enter CETP in the “Position/Search Term” field
+3.	Find the start and stop positions of CETP
+4.	Examine the gene
+(ANSWER Q2)
+
+Now that we know location of the gene, extract from the lab2.map file only SNPs that are within the gene.
+
+5.  From the lab2.map file, find out how many SNPs are within the CETP gene. (ANSWER Q3)
+
+Use subset function in R:
+lab2.map.cetp <- subset(lab2.map, V4 >= 56961950 & V4 <= 56983845)
+cetp.snps <- lab2.map.cetp$V2
+write.table(cetp.snps,file="/home/PH2780L/zcoban/Lab2/cetp.snps", row.names=F, col.names=F, quote=F)
+
+Alternatively, use awk in UNIX:
+
+awk '{if ($4 >= 56961950 && $4 <= 56983845) print}' lab2.map | cut -f2 > cetp.snps.2
+cat cetp.snps			Print the file cetp.snps to the screen
+diff cetp.snps cetp.snps.2	Check if the two files are the same
+
+6. Go to the PLINK website
+7. Under data management, how can you use the recode command to modify the files so they contain only SNPs of interest?
+
+plink --noweb --file lab2 --extract cetp.snps --recode --out cetp
+
+8. Use PLINK to calculate minor allele frequencies
+
+plink --noweb --file cetp --freq --out cetp_freq
+
+9. Find on the PLINK website the way to calculate pairwise LD (r2) for multiple SNPs
+10. Examine the LD among the SNPs
+(ANSWER Q4)
+
+plink --noweb --file cetp --r2 --out cetp_LD 
+plink --noweb --file cetp --r2 --ld-window-r2 0 --out cetp_LD_gt0 
+plink --noweb --file cetp --r2 --matrix  --out cetp_LD_matrix 
+
+11. Use PLINK to estimate haplotype frequencies
+(ANSWER Q5)
+
+	cat > filename		Type and redirect (save) to filename (ctrl + D to exit)
+
+cat > haplist
+* rs289715 rs289742
+* rs4783962 rs289715
+
+plink --noweb --file lab2 --hap haplist --hap-freq --out lab2_haps
+
+

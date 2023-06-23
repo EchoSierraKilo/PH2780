@@ -1,0 +1,119 @@
+
+
+
+Getting Started 
+
+
+Windows PC users:
+
+You will need to use PuTTY or Bitvise SSH Client to connect to our UNIX server (129.106.2.94) for all online computer lab sessions. Both can be downloaded from https://www.putty.org/.
+
+You will need to use WinSCP (https://winscp.net/eng/download.php) or Bitvise SFTP to transfer files between your computer and our UNIX server.
+
+
+
+Mac users:
+
+You will need to use Terminal to connect to our UNIX server (129.106.2.94) for all online computer lab sessions.
+
+Login: 
+ssh username@ 129.106.2.94
+
+Copy a file from your computer to the server: 
+scp your_local_folder/filename username@ 129.106.2.94:/home/username/
+
+Copy a file from the server to your computer:
+scp username@ 129.106.2.94:/home/username/filename your_local_folder
+
+
+
+
+
+
+
+
+Managing Datasets: UNIX 101
+
+Connect to 129.106.2.94
+Type in login and password (reset password at first login)
+
+UNIX commands
+passwd					change password
+pwd					show the present working directory
+ls					list files and folders in the current directory
+ls -l					list files and folders with detailed information
+mkdir “directory”			create a directory (e.g. Lab1)
+cd “directory”				go to a directory
+cd ..					go to the parent directory
+mv “filename1” “filename2”		change the file name from filename1 to filename2
+mv “filename” “directory”		move a file to a directory
+cp “filename1” “filename2”		copy a file with name filename1 to filename2
+cp “filename” “directory”		copy a file to a directory
+rm “filename”				remove a file
+rmdir “directory”			remove an empty directory
+rm -R “directory”			remove a directory and all files in it (use caution!!)
+less “filename”			see the contents of a file
+head “filename”			see the first few lines of a file
+tail “filename”				see the last few lines of a file
+clear					clear your screen
+wc “filename”				show the numbers of lines, words and bytes of a file
+man “command”			show the help document of a command
+exit					close the terminal and exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Managing Datasets: R 101
+
+Set working directory
+setwd("/home/PH2780L/your account name/Lab1/") ## set working directory
+getwd() ## get working directory
+
+Import data
+# read.table(file, header = FALSE, sep = "", quote = "\"'",…)
+# read.csv(file, header = TRUE, sep = ",", quote = "\"",
+         dec = ".", fill = TRUE, comment.char = "", …)
+
+?read.table  ## show the help document of read.table
+pheno <- read.table("/home/("/home/PH2780L/public/Lab1/pheno.txt", header=T, sep="\t")
+geno <- read.table("/home/("/home/PH2780L/public/Lab1/geno.txt", header=T, sep="\t")
+
+Merge data
+# merge(x, y, by = intersect(names(x), names(y)),
+      by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all, sort = TRUE, …)
+
+?merge  ## show the help document of merge
+pheno.geno <- merge(pheno, geno, by="id", all=T, sort=T)
+
+Data summary
+dim(pheno) ## check the dimension of a data frame
+dim(geno)
+summary(pheno.geno$age) ## for continuous variables
+table(pheno.geno$smoking) ## for categorical variables
+
+Export data
+# write.table(x, file = "", quote = TRUE, sep = " ", na = "NA", row.names = TRUE, col.names = TRUE, …)
+
+write.table(pheno.geno, file="phenogeno.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+
+q()  ## close the current R session and quit
+
+
+
+Applied Genetic Methods in Public Health – PHW 2780
+
+

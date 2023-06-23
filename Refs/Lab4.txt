@@ -1,0 +1,181 @@
+
+GWAS using PLINK
+
+Datasets needed for this lab: 
+lab4.ped
+lab4.map
+lab4_pheno_gwas.csv 
+
+Web page for PLINK: http://zzz.bwh.harvard.edu/plink/
+
+Quality Control Steps
+1. Copy the files from the /home/PH2780L/public/Lab4/ folder to your directory called Lab4 and examine the files. (ANSWER Q1)
+
+2. Review the PLINK web page to find the way to calculate the number of missing values per individual, missing values per SNP, allele frequency, and Hardy-Weinberg equilibrium. (ANSWER Q2-4)
+
+plink --noweb --file lab4 --missing --out lab4_miss
+plink --noweb --file lab4 --freq --out lab4_frq
+plink --noweb --file lab4 --hardy --out lab4_hardy
+
+
+3. Use your unix commands to sort the lmiss and imiss files. (ANSWER Q2-3)
+
+sort -n -r -k6 lab4_miss.imiss | head
+sort -n -r -k5 lab4_miss.lmiss | head
+
+
+4. Evaluate the frequency file and the HWE results. (ANSWER Q4)
+
+sort -n -k5 lab4_frq.frq | awk '{if($5 > 0) print}' | head
+grep ALL lab4_hardy.hwe | awk '{if(NF == 9) print}' | sort -g -k9 | head
+
+
+5. Exclude SNPs and individuals based on the following parameters: MAF<0.01, missing genotype rate >10%, HWE p-value <0.0001, and individuals with more than 10% missing genotypes.  Recode the files and save the output as “lab4clean”.
+
+plink --noweb  --file lab4 --mind 0.1 --geno 0.1 --maf 0.01 --hwe 0.0001 --recode --out lab4clean
+
+
+
+
+
+
+Analysis
+1. Create a phenotype file that is acceptable for PLINK.  Hint: go to the section on the web page related to basic usage/data formats (alternate phenotypes).  
+Choose gwas_id and use HDL as your phenotype. Save the new phenotype file as hdl.pheno.  (ANSWER Q5)
+
+awk -F, '{print $1, $1, $4}' lab4_pheno_gwas.csv | sed -e '1d' > hdl.pheno
+
+
+2. Create a covariate file containing age and sex.  Save the file as hdl.covar. (ANSWER Q6)
+awk -F, '{print $1, $1, $2, $3}' lab4_pheno_gwas.csv | sed 's/F/2/g' | sed 's/M/1/g' | sed -e '1d' > hdl.covar
+
+3. Evaluate the association (read plink web, section 11 Association) with HDL and review the results after sorting by p-value.  (ANSWER Q7)
+
+plink --noweb --file lab4clean --pheno hdl.pheno --covar hdl.covar --linear --ci 0.95 --out hdl
+
+grep ADD hdl.assoc.linear | sort -g -k12 | head
+
+
+4. Find the position of the top SNP in the map file.  Look up the SNP using the UCSC genome browser (https://genome.ucsc.edu/), select hg38 and see where it lies on the genome. (ANSWER Q8)
+
+grep rs247617 lab4.map
+
+
+5. To annotate the top regions and prepare for a regional plot. Look at http://www.scandb.org/newinterface/about.html for SNP annotation. To plot the results, go to http://locuszoom.org/. To make the input file for a regional plot, first find the region of interest around the top SNP (take ~150kb on each side of the SNP) (ANSWER Q9)
+
+grep ADD hdl.assoc.linear | awk '{if ($3 >= 56956804-150000 && $3 <= 56956804+150000) print $2, $12}' | sed  '1i SNP Pval' > hdl.region
+
+Transfer hdl.region to your local computer and upload it in LocusZoom (please choose Legacy Services: Single Plot, Your Data – Original LocusZoom) to create a regional association plot. (ANSWER Q10)
+
+
+6. Plot the results, make a Q-Q plot and generate lambda in R. (ANSWER Q11)
+
+## Q11 Manhattan plot, QQ plot and lambda calculation
+hdl.results <- read.table("hdl.assoc.linear", header = TRUE)
+hdl.results.add <- subset(hdl.results, TEST == "ADD")
+
+## Manhattan plot
+pdf("MH.pdf")
+plot(hdl.results.add$BP, -log10(hdl.results.add$P), col="blue")
+dev.off()
+
+## QQ plot
+qqpval = function(x){
+  x <- sort(-log10(x[x>0]))
+  n <- length(x)
+  pp <- ppoints(n)
+  plot(-log10(rev(pp)), x, xlab="Expected", ylab="Observed")
+  abline(0,1,lty=2, col="purple")
+}
+
+pdf("QQ.pdf")
+qqpval(hdl.results.add$P)
+dev.off()
+
+## lambda calculation
+chi2 <- qchisq(hdl.results.add$P, df=1, lower.tail=F) 	
+g <- median(chi2, na.rm=TRUE)		
+lambda <- round(g/qchisq(0.5, df=1), digits=5)
+
+
+7. Assume we have two studies with identical results, meta-analyze those two study results, and compare with individual study results. Go to METAL https://genome.sph.umich.edu/wiki/METAL_Documentation, and prepare METAL input files and scripts. (ANSWER Q12)
+
+## prepare METAL input file
+hdl.results <- read.table("hdl.assoc.linear", header = TRUE)
+hdl.results.add <- subset(hdl.results, TEST == "ADD")
+hdl.results.add <- hdl.results.add[,c("SNP", "BP", "NMISS","BETA", "SE", "P")]
+lab4.map <- read.table("lab4_frq.frq", header=TRUE)
+hdl.results.add <- merge(lab4.map, hdl.results.add, by="SNP", all.x=F, all.y=T)
+write.table(hdl.results.add, file="hdl_metal_file1.txt", row.names=F, col.names=T, sep=" ", quote=F)
+
+## in Unix, create an identical results file
+cp hdl_metal_file1.txt hdl_metal_file2.txt
+
+## create METAL scripts
+cat > hdl.metal
+# Input main columns:
+MARKER SNP
+ALLELE A1 A2
+EFFECT BETA
+
+# Specify which scheme (analysis method) to use and provide column:
+SCHEME STDERR
+STDERRLABEL SE
+
+# Track AFs across studies and provide column:
+AVERAGEFREQ ON
+MINMAXFREQ ON
+FREQLABEL MAF
+
+# Keep custom variable NMISS in the results:
+CUSTOMVARIABLE NMISS
+
+# Apply genomic control correction before meta-analysis:
+GENOMICCONTROL ON
+
+# PROCESS Statements here
+PROCESS hdl_metal_file1.txt
+PROCESS hdl_metal_file2.txt
+
+OUTFILE hdl_metal_results .txt
+ANALYZE HETEROGENEITY
+
+CLEAR
+
+## run meta-analysis using METAL
+metal hdl.metal
+
+## examine the meta-analysis results in R
+metal.results <- read.table("hdl_metal_results1.txt", header=T)
+metal.results.sort <- metal.results[order(metal.results$P.value),]
+head(metal.results.sort)
+
+
+8. Plot the meta-analysis results, make a Q-Q plot and generate lambda in R. (ANSWER Q13)
+
+lab4.map <- read.table("lab4.map", header=FALSE)
+names(lab4.map) <- c("CHR", "SNP", "cM", "BP")
+metal.results <- merge(lab4.map, metal.results, by.x="SNP", by.y="MarkerName", all.x=F, all.y=T)
+
+pdf("MH_meta.pdf")
+plot(metal.results$BP, -log10(metal.results$P.value), col="blue")
+dev.off()
+
+qqpval = function(x){
+  x <- sort(-log10(x[x>0]))
+  n <- length(x)
+  pp <- ppoints(n)
+  plot(-log10(rev(pp)), x, xlab="Expected", ylab="Observed")
+  abline(0,1,lty=2, col="purple")
+}
+
+pdf("QQ_meta.pdf")
+qqpval(metal.results$P.value)
+dev.off()
+
+## lambda calculation
+chi2 <- qchisq(metal.results$P.value, df=1, lower.tail=F) 	
+g <- median(chi2, na.rm=TRUE)		
+lambda <- round(g/qchisq(0.5, df=1), digits=5)
+
+
